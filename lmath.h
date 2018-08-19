@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <string>
 #include <sstream>
+#include <cmath>
 #include <fstream>
 
 using namespace std;
@@ -22,6 +23,7 @@ enum IO {
 class lint {
 private:
     std::vector<unsigned long long> num;
+    bool isneg = false;
 public:
     //region Constructors
 

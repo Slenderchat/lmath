@@ -13,6 +13,9 @@ int main() {
     x = lint(b1);
     y = lint(b2);
     z = lint(b3);
+    y < x;
+    bool r = z < y;
+    r = z < x;
     if ((x > y) && (x > z)) {
         x.print();
     } else if ((y > x) && (y > z)) {

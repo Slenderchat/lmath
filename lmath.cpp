@@ -100,19 +100,26 @@ lint &lint::operator+=(long long x) {
 
 lint lint::operator-(lint x) {
     lint b = *this;
+    if (this->num.size() < x.num.size()) this->isneg = true;
     while (b.num.size() < x.num.size()) {
-        b.num.push_back(0);
+        b.num.insert(b.num.begin(), 0);
     }
     while (b.num.size() > x.num.size()) {
-        x.num.push_back(0);
+        x.num.insert(x.num.begin(), 0);
     }
-    for (int i = static_cast<int>(b.num.size() - 1); i >= 0; i--) {
-        unsigned long long buff = b.num[i] - x.num[i];
+    for (int i = 0; i < b.num.size(); i++) {
+        long long buff = b.num[i] - x.num[i];
         if (buff > 0) {
             b.num[i] = buff;
-        } else {
-            b.num[i - 1] -= 1;
-            b.num[i] = NUMBASE - x.num[i];
+        } else if (buff < 0 && i < (b.num.size() - 1)) {
+            if (b.num[i + 1] > 0) {
+                b.num[i + 1] -= 1;
+                buff = (b.num[i] + NUMBASE) - x.num[i];
+                b.num[i] = buff;
+            }
+        } else if (buff < 0 && i == (b.num.size() - 1)) {
+            b.num[i] = abs(buff);
+            b.isneg = true;
         }
     }
     int i = 0;
@@ -224,27 +231,27 @@ lint &lint::operator%=(long long x) {
 
 bool lint::operator==(lint x) {
     lint b = *this - x;
-    if ((b.num.size() == 1) && (b.num[0] == 0)) {
-        return (true);
-    } else {
-        return (false);
-    }
+    return ((b.num.size() == 1) && (b.num[0] == 0));
 }
 
 bool lint::operator<(lint x) {
-
+    lint b = *this - x;
+    return (b.isneg);
 }
 
 bool lint::operator>(lint x) {
-
+    lint b = *this - x;
+    return (!b.isneg);
 }
 
 bool lint::operator<=(lint x) {
-
+    lint b = *this - x;
+    return ((b.isneg) && (*this == x));
 }
 
 bool lint::operator>=(lint x) {
-
+    lint b = *this - x;
+    return ((!b.isneg) && (*this == x));
 }
 
 //endregion
