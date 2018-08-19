@@ -2,7 +2,8 @@
 
 #include <fstream>
 
-using namespace std;
+using std::fstream,
+std::ios;
 
 int main() {
     fstream io;
