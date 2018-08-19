@@ -1,8 +1,5 @@
 #include "lmath.h"
 
-using std::vector, std::string, std::strtoull,
-std::reverse;
-
 //region Constructors
 
 lint::lint() {
@@ -26,10 +23,10 @@ lint::lint(const char *x) {
 }
 
 lint::lint(long long x) {
-    if (x > BASE - 1) {
+    if (x > NUMBASE - 1) {
         do {
-            this->num.push_back(x % BASE);
-            x /= BASE;
+            this->num.push_back(x % NUMBASE);
+            x /= NUMBASE;
         } while (x > 0);
     } else {
         this->num.push_back(x);
@@ -72,11 +69,11 @@ lint lint::operator+(lint x) {
             buff += overflow;
             overflow = 0;
         }
-        if (buff < BASE - 1) {
+        if (buff < NUMBASE - 1) {
             b.num[i] = buff;
         } else {
-            b.num[i] = BASE - 1;
-            overflow += buff % BASE;
+            b.num[i] = NUMBASE - 1;
+            overflow += buff % NUMBASE;
         }
     }
     return (b);
@@ -115,7 +112,7 @@ lint lint::operator-(lint x) {
             b.num[i] = buff;
         } else {
             b.num[i - 1] -= 1;
-            b.num[i] = BASE - x.num[i];
+            b.num[i] = NUMBASE - x.num[i];
         }
     }
     int i = 0;
@@ -176,7 +173,17 @@ lint &lint::operator/=(long long x) {
 //region Operator*
 
 lint lint::operator*(lint x) {
+    lint b = *this;
+    while (b.num.size() < x.num.size()) {
+        b.num.push_back(0);
+    }
+    while (b.num.size() > x.num.size()) {
+        x.num.push_back(0);
+    }
+    for (int i = static_cast<int>(b.num.size() - 1); i >= 0; i--) {
 
+    }
+    return (b);
 }
 
 lint lint::operator*(long long x) {
@@ -212,5 +219,64 @@ lint &lint::operator%=(long long x) {
 }
 
 //endregion
+
+//region Comparision Operators
+
+bool lint::operator==(lint x) {
+    lint b = *this - x;
+    if ((b.num.size() == 1) && (b.num[0] == 0)) {
+        return (true);
+    } else {
+        return (false);
+    }
+}
+
+bool lint::operator<(lint x) {
+
+}
+
+bool lint::operator>(lint x) {
+
+}
+
+bool lint::operator<=(lint x) {
+
+}
+
+bool lint::operator>=(lint x) {
+
+}
+
+//endregion
+
+//endregion
+
+//region Members
+
+void lint::print(IO x) {
+    short z = static_cast<short>(NUMBASEZEROES * (this->num.size() - 1));
+    stringstream b;
+    string o;
+    for (int i = 0; i < this->num.size(); i++) {
+        b << this->num[i];
+    }
+    b >> o;
+    if (o.length() < z) {
+        do {
+            b << '0';
+            b >> o;
+        } while (o.length() < z);
+    }
+    if (x == FL) {
+        std::fstream iof;
+        iof.open("OUTPUT.TXT", ios::out);
+        if (iof.is_open()) {
+            iof << o.c_str();
+        }
+        iof.close();
+    } else {
+        printf(o.c_str());
+    }
+}
 
 //endregion

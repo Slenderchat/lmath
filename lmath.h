@@ -1,11 +1,23 @@
+#pragma once
+
 #ifndef LMATH_LIBRARY_H
 #define LMATH_LIBRARY_H
 
-#define BASE 10000000000000000000
+#define NUMBASE 1000000000000000000ULL
+#define NUMBASEZEROES 18ULL
 
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <sstream>
+#include <fstream>
+
+using namespace std;
+
+enum IO {
+    FL = 0,
+    CL = 1
+};
 
 class lint {
 private:
@@ -68,6 +80,26 @@ public:
     lint &operator%=(lint x);
 
     lint &operator%=(long long x);
+
+    //region Comparision Operators
+
+    bool operator==(lint x);
+
+    bool operator<(lint x);
+
+    bool operator>(lint x);
+
+    bool operator<=(lint x);
+
+    bool operator>=(lint x);
+
+//endregion
+
+    //endregion
+
+    //region Members
+
+    void print(IO x = FL);
 
     //endregion
 };
